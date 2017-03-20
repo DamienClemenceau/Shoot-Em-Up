@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class SimpleBullet : MonoBehaviour {
     public float speed;
+    public float lifeTime;
     [HideInInspector]
     public GameObject creator;
 
-	void Update () 
+    void Awake()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+
+	void FixedUpdate () 
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
 	}
@@ -16,7 +22,6 @@ public class SimpleBullet : MonoBehaviour {
     {
         if (collider.gameObject != creator)
         {
-            Destroy(collider.gameObject);
             Destroy(gameObject);
         }
     }

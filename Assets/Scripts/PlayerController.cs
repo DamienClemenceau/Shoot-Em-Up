@@ -14,24 +14,30 @@ public struct ShipInfo
 public class PlayerController : MonoBehaviour {
     public ShipInfo shipInfo;
     public GameObject bullet;
+    public float fireRate;
+    private float primaryFireCooldown;
     private Vector2 velocity;
 
-	void Update () 
+	void FixedUpdate() 
     {
-        float xAxis = Input.GetAxisRaw("Horizontal");
+        float xAxis = Input.GetAxisRaw("Yaw"); // TODO : Need to change Input Settings
         float yAxis = Input.GetAxisRaw("Vertical");
-        float yaw = Input.GetAxisRaw("Yaw");
+        float yaw = Input.GetAxisRaw("Horizontal");
 
         velocity.x = xAxis * shipInfo.lateralSpeed;
-        velocity.y = yAxis * shipInfo.thrustSpeed;
+        velocity.y = yAxis * (Mathf.Sign(yAxis) == 1 ? shipInfo.thrustSpeed : shipInfo.reverseSpeed);
 
         transform.Rotate(Vector3.forward, yaw * shipInfo.yawSpeed);
         transform.Translate(velocity * Time.deltaTime);	
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space) && primaryFireCooldown < Time.time)
         {
-            GameObject goBullet = Instantiate(bullet, transform.position, Quaternion.identity);
-            goBullet.GetComponent<SimpleBullet>().creator = gameObject;
+            primaryFireCooldown = Time.time + fireRate;
+            foreach (GameObject primary in shipInfo.primaryWeapon) 
+            {
+                GameObject goBullet = Instantiate(bullet, primary.transform.position, primary.transform.rotation);
+                goBullet.GetComponent<SimpleBullet>().creator = gameObject;
+            }
         }
 	}
 }
