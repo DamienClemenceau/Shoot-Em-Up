@@ -7,6 +7,7 @@ public class SimpleBullet : MonoBehaviour {
     public float lifeTime;
     [HideInInspector]
     public GameObject creator;
+    public int damage;
 
     void Awake()
     {
@@ -20,8 +21,14 @@ public class SimpleBullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
+        
         if (collider.gameObject != creator)
         {
+            
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Entity"))
+            {
+                collider.GetComponent<Entity>().TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }

@@ -11,14 +11,15 @@ public struct ShipInfo
     public List<GameObject> primaryWeapon, secondaryWeapon;
 }
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Entity
+{
     public ShipInfo shipInfo;
     public GameObject bullet;
     public float fireRate;
     private float primaryFireCooldown;
     private Vector2 velocity;
 
-	void FixedUpdate() 
+    void FixedUpdate() 
     {
         float xAxis = Input.GetAxisRaw("Yaw"); // TODO : Need to change Input Settings
         float yAxis = Input.GetAxisRaw("Vertical");
