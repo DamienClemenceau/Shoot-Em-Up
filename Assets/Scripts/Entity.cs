@@ -6,6 +6,14 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     public float structurePoint;
+    private Color damageColor = new Color(1, 1, 1, 0.2f);
+    private float blinkLength = 0.05f;
+    private SpriteRenderer spriteRenderer;
+
+    void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void TakeDamage(int amount)
     {
@@ -14,5 +22,13 @@ public class Entity : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        StartCoroutine(DamageColorSwap());
+    }
+
+    private IEnumerator DamageColorSwap()
+    {
+        spriteRenderer.color = damageColor;
+        yield return new WaitForSeconds(blinkLength);
+        spriteRenderer.color = Color.white;
     }
 }

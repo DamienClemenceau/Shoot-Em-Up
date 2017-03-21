@@ -8,10 +8,17 @@ public class SimpleBullet : MonoBehaviour {
     [HideInInspector]
     public GameObject creator;
     public int damage;
+    public float deviation;
+    public GameObject impactFX;
 
     void Awake()
     {
         Destroy(gameObject, lifeTime);
+    }
+
+    void Start()
+    {
+        transform.Rotate(0, 0, Random.Range(-deviation, deviation));
     }
 
 	void FixedUpdate () 
@@ -31,5 +38,10 @@ public class SimpleBullet : MonoBehaviour {
             }
             Destroy(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        Instantiate(impactFX, transform.position, transform.rotation);
     }
 }

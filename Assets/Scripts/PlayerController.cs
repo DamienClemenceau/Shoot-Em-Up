@@ -14,7 +14,7 @@ public struct ShipInfo
 public class PlayerController : Entity
 {
     public ShipInfo shipInfo;
-    public GameObject bullet;
+    public GameObject bullet, muzzleFlash;
     public float fireRate;
     private float primaryFireCooldown;
     private Vector3 velocity;
@@ -39,6 +39,7 @@ public class PlayerController : Entity
             {
                 GameObject goBullet = Instantiate(bullet, primary.transform.position, primary.transform.rotation);
                 goBullet.GetComponent<SimpleBullet>().creator = gameObject;
+                Instantiate(muzzleFlash, primary.transform.position, primary.transform.rotation, primary.transform);
             }
         }
 	}
