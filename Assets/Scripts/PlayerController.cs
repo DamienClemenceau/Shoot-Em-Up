@@ -17,21 +17,22 @@ public class PlayerController : Entity
     public GameObject bullet;
     public float fireRate;
     private float primaryFireCooldown;
-    private Vector2 velocity;
+    private Vector3 velocity;
+    private Vector2 currentVelocity;
+    public float smoothTime;
 
     void FixedUpdate() 
     {
-        float xAxis = Input.GetAxisRaw("Yaw"); // TODO : Need to change Input Settings
-        float yAxis = Input.GetAxisRaw("Vertical");
-        float yaw = Input.GetAxisRaw("Horizontal");
+        Vector2 dir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 yaw = new Vector2(Input.GetAxisRaw("HorizontalYaw"), Input.GetAxisRaw("VerticalYaw"));
 
-        velocity.x = xAxis * shipInfo.lateralSpeed;
-        velocity.y = yAxis * (Mathf.Sign(yAxis) == 1 ? shipInfo.thrustSpeed : shipInfo.reverseSpeed);
+        velocity.x = Mathf.SmoothDamp(velocity.x, dir.x * shipInfo.lateralSpeed, ref currentVelocity.x, smoothTime);
+        velocity.y = Mathf.SmoothDamp(velocity.y, dir.y * (Mathf.Sign(dir.y) == 1 ? shipInfo.thrustSpeed : shipInfo.reverseSpeed), ref currentVelocity.y, smoothTime);
+        
+        transform.Rotate(Vector3.forward * (yaw.x * shipInfo.yawSpeed));
+        transform.position += (velocity * Time.deltaTime);	
 
-        transform.Rotate(Vector3.forward, yaw * shipInfo.yawSpeed);
-        transform.Translate(velocity * Time.deltaTime);	
-
-        if(Input.GetKey(KeyCode.Space) && primaryFireCooldown < Time.time)
+        if(Input.GetAxis("Fire1") > 0 && primaryFireCooldown < Time.time)
         {
             primaryFireCooldown = Time.time + fireRate;
             foreach (GameObject primary in shipInfo.primaryWeapon) 

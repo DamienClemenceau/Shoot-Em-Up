@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour {
+    private float depth = -10;
+    private PlayerController player;
 
-	// Use this for initialization
-	void Start () {
-		
+    void Start ()
+    {
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+	    if(player != null)
+        {
+            transform.position = new Vector3
+            (
+                player.transform.position.x,
+                player.transform.position.y,
+                depth
+            );
+        }	
 	}
 }
