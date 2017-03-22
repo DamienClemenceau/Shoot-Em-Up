@@ -12,11 +12,11 @@ public class CameraBehaviour : MonoBehaviour {
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 	}
 	
-	void FixedUpdate ()
+	void FixedUpdate()
     {
 	    if(player != null)
         {
-            Vector3 target = player.transform.position + player.velocity.normalized * 2 ;
+            Vector3 target = player.transform.position + player.velocity * 0.5f;
             target.z = depth;
 
             transform.position = Vector3.Lerp
@@ -25,6 +25,9 @@ public class CameraBehaviour : MonoBehaviour {
                 target,
                 lerpTime * Time.deltaTime
             );
-        }	
+        }
+
+        Debug.DrawLine(transform.position + Vector3.up, transform.position + Vector3.down);
+        Debug.DrawLine(transform.position + Vector3.right, transform.position + Vector3.left);
 	}
 }
